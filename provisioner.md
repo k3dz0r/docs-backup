@@ -1,7 +1,7 @@
 ---
-id: "provisioner"
+id: "offer-provisioner"
 title: "Offer Provisioner"
-slug: "/offers/provisioner/"
+slug: "/offers/offer-provisioner/"
 sidebar_position: 8
 ---
 
@@ -13,9 +13,9 @@ Every five minutes, Offer Provisioner checks for new orders that use your active
 
 ## Offer Provisioner order
 
-Running a Offer Provisioner order is mandatory for maintaining any active offer. Super Protocol is decentralized, so you, as the Offer Provider, are responsible for keeping the Offer Provisioner order running. If your offer becomes Inactive, you can reactivate it by contacting the Super Protocol team on [Discord](https://discord.gg/superprotocol) in the #developers channel (see [Moderation Guidelines](https://docs.dev.superprotocol.com/developers/marketplace/moderation/)).
+Running an Offer Provisioner order is mandatory for maintaining any active offer. Super Protocol is decentralized, so you, as the Offer Provider, are responsible for keeping the Offer Provisioner order up and running. If your offer becomes Inactive, you can reactivate it by contacting the Super Protocol team on [Discord](https://discord.gg/superprotocol) in the #developers channel (see [Moderation Guidelines](https://docs.dev.superprotocol.com/developers/marketplace/moderation/)).
 
-Currently, each of your active offers should have a dedicated Offer Provisioner order running.
+Currently, every active offer should have a dedicated Offer Provisioner order running.
 
 ## Support
 
