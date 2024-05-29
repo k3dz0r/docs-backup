@@ -172,41 +172,43 @@ Where:
 - `--storage 25,33` - slot 33 of storage offer 25. Maximum disk capacity for this slot is 0.977 GB.
 - `--min-rent-minutes 43200` - the lease time is specified as 30 days, because we need the offer content to be available on demand. You can make the lease longer. You can also [replenish the balance](/developers/cli_commands/orders/replenish-deposit) later.
 
-As a result, SPCTL will generate a resource JSON file that contains the information for TEE on how to access your uploaded Solution or Data. Copy this file to the Provider Tools directory.
+As a result, SPCTL will generate `resource.json` file that contains the information for TEE on how to access your uploaded Solution or Data. Copy this file to the Provider Tools directory.
 
 ---
 
 **Expected step result:**
 * Solution or Data has been prepared, archived, and uploaded to long term storage;
-* A `resource.json` has been generated and copied to the Provider Tools directory.
+* `resource.json` has been generated and copied to the Provider Tools directory.
 
 ## Step 3. Configure the offer
 
-In this step, you will create two JSON files in the Provider Tools directory. The first one will contain a general description and properties of the offer. The second one will specify required slots and options for your Solution or Data offer.
+In this step, you will create two JSON files in the Provider Tools directory. The first one will contain a general description and properties of the offer. The second one will specify the required slots and options for your Solution or Data offer.
 
 ### Offer description
 
-Create the first JSON file in the Provider Tools directory. In this guide, it will be called `offer.json`, but you can use any name you want.
+Create the first JSON file in the Provider Tools directory. In this guide, it will be called `offer.json`, but you can choose any name you want.
 
-As an example, 
+:::note
 
-Let's say that in this example our offer is a Solution, a Python script similar to the [Image Classification](/developers/offers/python-image) offer.
+It is important that your offer is well-documented, operational, and not containing anything illegal. Refer to the [Moderation Guidelines](/developers/marketplace/moderation/) for more details.
 
-Copy and save the format below in a .json file. You can name it anything you want, but for this tutorial let's call it `offer.json`.
+:::
+
+Copy and add the format below into this JSON file:
 
 ```json title="offer.json"
 {
-  "name": "Name of your offer goes here",
+  "name": "Name of your offer",
   "group": "0",
-  "offerType": "2",
+  "offerType": "OFFER_TYPE",
   "cancelable": false,
-  "description": "Description of your offer goes here, it may include HTML",
+  "description": "Description of your offer; it may include HTML",
   "restrictions": {
     "offers": [
-      "5"
+      "REQUIRED_OFFER_ID"
     ],
     "types": [
-      "2"
+      "REQUIRED_OFFER_TYPE"
     ]
   },
   "metadata": "",
@@ -221,28 +223,66 @@ Copy and save the format below in a .json file. You can name it anything you wan
 }
 ```
 
-Where you need to fill out the following fields:
+Fill in the following fields:
 
-* `name` - the name of your offer;
-* `group` - leave it as 0, meaning it belongs to input group (Solution or Data offers);
-* `cancelable` - leave it as False;
-* `offerType` - type has to be either 2 for a Solution offer or 3 for Data offer;
-* `description` - the description of your offer. Description may contain HTML;
-* `restrictions` - restrictions indicate which other offers must be used together with your solution:
-  * `offers` - you can restrict here to one of two base images: either 5 (Python) or 6 (Node.js);
-  * `types` - you need to restrict to either offer types 2 (Solutions) or 3 (Data).
+- `name` – the name of your offer;
+- `group` – leave it as 0;
+- `cancelable` – leave it as False;
+- `offerType` – OFFER_TYPE has to be either 2 for a Solution offer or 3 for Data offer;
+- `description` – the description of your offer, it may contain HTML;
+- `restrictions` – restrictions indicate which other offers must be used together with your offer:
+  + `offers` – REQUIRED_OFFER_ID is the ID of the offer that must be used together with your offer. If you are creating a Solution offer, it has to be either 5 for [Python Base Image](https://marketplace.superprotocol.com/?offer=offerId%3D5) or 6 for [Node.js Base Image](https://marketplace.superprotocol.com/?offer=offerId%3D6);
+  + `types` – REQUIRED_OFFER_TYPE has to be either 2 for Solution offers in the restrictions or 3 for Data offers in the restrictions.
 
-<Highlight color="red">История с рестрикшенами не очень понятна: если солюшен, то можно указать также данные? или данные, то можно указать солюшен? Можно вообще не указывать? людям это будет не понятно, нужно обсудить. И на странице offers update тоже уточнить, там тоже не понятно описано.</Highlight>
+**Example 1**: For a Solution offer identical to [Image Classification](/developers/offers/python-image), the part of `offer.json` that you have to fill out should look like this:
 
-You can learn more about the other fields in the [offers update](/developers/cli_commands/offers/offers/update) command.
+```json
+"name": "Image Classification",
+"group": "0",
+"offerType": "2",
+"cancelable": false,
+"description": "Machine-trained Python model that recognizes and classifies objects in an image<br/><br/>This demo solution is compatible with Image Classification Dataset #1 and #2.<br/><br/>It is also possible to use custom datasets. Refer to the documentation for detailed instructions.",
+"restrictions": {
+  "offers": [
+    "5"
+  ],
+  "types": [
+    "2"
+  ]
+}
+```
 
-As an example, this is what these fields look like in the Marketplace:
+Where `"offers": ["5"]` is for the Python Base Image which is a Solution offer, hence `"types": ["2"]`.
+
+**Example 2**: For a Data offer identical to [Image Classification Dataset #1](https://marketplace.superprotocol.com/data?offer=offerId%3D18), the part of `offer.json` that you have to fill out should look like this:
+
+```json
+"name": "Image Classification Dataset #1",
+"group": "0",
+"offerType": "3",
+"cancelable": false,
+"description": "Dataset with images of various breeds of dogs<br/><br/>This demo dataset is compatible with the Image Classification solution. Refer to the documentation for detailed instructions.",
+"restrictions": {
+  "offers": [
+    "5",
+    "8"
+  ],
+  "types": [
+    "2",
+    "2"
+  ]
+}
+```
+
+Where `"8"` indicates the ID of the Image Classification Solution offer. Note that you must specify the offer type for every requried offer in the `restrictions`, hence `"types": ["2","2"]`.
+
+To get an example, check existing offers via the Marketplace GUI:
 
 <img src={require('./../images/cli_guides_providers_offers_1.png').default} width="auto" height="auto"/>
 
 <img src={require('./../images/cli_guides_providers_offers_2.png').default} width="auto" height="auto"/>
 
-And in SPCTL (on blockchain), using the [offers get](/developers/cli_commands/offers/offers/get) command:
+Or via CLI using the SPCTL [`offers get`](/developers/cli_commands/offers/offers/get) command:
 
 ```
 ./spctl offers get value 8
@@ -253,23 +293,17 @@ And in SPCTL (on blockchain), using the [offers get](/developers/cli_commands/of
 <br/>
 <br/>
 
-It is important that your offer is well-documented, operational, and not containing anything illegal.
-
-Please refer to the [Moderation Guidelines](/developers/marketplace/moderation/) for more details.
+Refer to the documentation of the [`offers update`](/developers/cli_commands/offers/offers/update) SPCTL command to learn more about the other fields.
 
 ---
 
 ### Offer requirements
 
-**Second**, a .json with the values of the required slots and options for your solution or data offer.
+You must specify the values of the required slots and options for your Solution or Data offers. Each slot has its price, either Fixed or Per Hour. Depending on the requirements, the customer will select a TEE compute offer configuration, which cannot be lower than your requirements. Read more about the slots and options [here](/developers/fundamentals/slots).
 
-You can learn more about the slots and options [here](/developers/fundamentals/slots).
+Every offer you create may have multiple requirements slots. For each slot you want to add, you must create a separate JSON file. In this guide, it will be called `offer-slot.json`, but you can choose any name you want.
 
-In a few words: each offer, either solution or data, has system requirements for execution. This is where you specify these requirements. Each requirements slot can have its own price, either Fixed or Per Hour. Depending on these requirements, the customer will select a TEE compute offer configuration, which cannot be lower than your requirements. 
-
-Copy and save this format in a .json file. You can name it anything you want, but for this tutorial let's call it `offer-slot.json`.
-
-Do this for each requirements slot that you want to add to the offer (you can have multiple).
+Copy and save the following format in your `offer-slot.json` file:
 
 ```json title="offer-slot.json"
 {
@@ -293,15 +327,13 @@ Do this for each requirements slot that you want to add to the offer (you can ha
 }
 ```
 
-You can learn more about these fields in the [offers add-slot](/developers/cli_commands/offers/slots/add-slot) command. Note that this command may be used to create additional slots, but the initial slot must be created using Provider Tools as per this guide.
+You can learn more about these fields in the description of the [`offers add-slot`](/developers/cli_commands/offers/slots/add-slot) command. Modify these fields as necessary. Since this is your offer, only you know the [pricing terms](/developers/fundamentals/orders#cost-and-pricing) and compute configuration your solution or data needs to run.
 
-Modify these fields as necessary. This is your offer, and only you know what compute configuration your solution or data will need to run, as well as the [pricing terms](/developers/fundamentals/orders#cost-and-pricing).
-
-As an example, this is what they look like in the Marketplace: 
+To get an example, check existing offers via the Marketplace GUI:
 
 <img src={require('./../images/cli_guides_providers_offers_4.png').default} width="auto" height="auto"/>
 
-And in SPCTL (on blockchain), using the [offers get-slot](/developers/cli_commands/offers/slots/get-slot) command:
+Or via CLI using the SPCTL [offers get-slot](/developers/cli_commands/offers/slots/get-slot) command:
 
 ```
 ./spctl offers get-slot value --offer 8 --slot 4
@@ -312,10 +344,10 @@ And in SPCTL (on blockchain), using the [offers get-slot](/developers/cli_comman
 ---
 
 **Expected step result:**
-* `offer.json` with offer description is prepared;
-* `offer-slot.json` with offer requirements (slots and options) is prepared. There may be more than one.
+* `offer.json` with offer description;
+* `offer-slot.json` with offer requirements (slots and options). There may be more than one such file.
 
-## **Step 4 - Creating provider and offer**
+## **Step 4. Create the provider and offer**
 
 Let's recap. At this point you need to have the following in the Provider Tools directory:
 * `config.json` with the credentials for authority, action and tokenReceiver accounts;
