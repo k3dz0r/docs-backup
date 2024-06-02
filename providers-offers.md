@@ -8,111 +8,98 @@ sidebar_position: 4
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Create and manage providers and offers
+# Creating and managing Providers and Offers
 
-## About
+## **About**
 
-This guide will walk you through creating a provider and a Solution or Data offer in Super Protocol. As a provider, you can monetize your offers by earning TEE tokens from leasing your products to clients. 
+This guide will take you step by step through the process of creating a provider and a Solution or Data offer in Super Protocol. As a provider you will be able to monetize your offers by earning TEE tokens from leasing your products to clients. 
 
-Confidentiality and decentralization ensure clients can only use your Solution and Data offers in orders on your terms. In other words, users cannot download, modify, or otherwise access your Solution or Data without your permission even when they use it in orders. Confidentiality protects both providers and customers.
+Confidentiality and decentralization ensure that your Solution and Data offers may be securely used in orders, on the terms that you specify, but cannot be downloaded, modified or otherwise used without your permission. Confidentiality protects both providers and customers.
 
 :::info Testnet limitations
 
-As of Testnet 5, you can only create Solution and Data offers. The ability to create Storage and Compute offers will be available in future releases. Monetization is only possible with test TEE tokens until the project goes to Mainnet.
+As of Testnet 5, you can only create Solution and Data offers. Ability to create Storage and TEE Compute offers will be available in future releases. Monetization currently is only possible with test TEE tokens until project goes to Mainnet.
 
 :::
 
-## Prerequisites
+## **Prerequisites**
 
-This guide requires a general understanding of Super Protocol basic concepts such as *Marketplace*, *orders*, *offers*, etc. Learn about [Super Protocol fundamentals](/developers/fundamentals) before proceeding.
+### Testnet credentials
 
-To set up a provider and create offers, you need:
+You should have received the credentials by email from Super team:
+- **Testnet account address** - the public key of Super testnet wallet;
+- **Testnet account private key** - the private key of Super testnet wallet;
+- **Access token** - used as an anti-fraud measure for receiving free test TEE and MATIC tokens.
 
-- Computer with Linux or macOS operating system. On Windows, install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux).
+If you haven't - please, [apply to join Testnet](/testnet/).
 
-- Super Protocol Testnet access. If you don't have it yet, [apply to join](/testnet/). The Super Protocol team sends out invites daily, but it may take several days if the number of requests is high. You can ask any Community Manager on the [Super Protocol Discord server](https://discord.gg/superprotocol) about the status of your request. When your access is ready, you will receive an email with your Testnet credentials:
-  - _Testnet Account address_ – the public key of Super testnet wallet;
-  - _Private Key_ – the private key of Super testnet wallet;
-  - _Access Token_ – necessary to receive free test TEE and MATIC tokens.
-
-- [Storj](https://www.storj.io/) account, either Free Trial or Pro.
-
-- [SPCTL](/developers/cli_guides/) – Super Protocol CLI tool. You will need it to upload your offer and create a Offer Provisioner order. Refer to the [SPCTL guide](/developers/cli_guides/configuring) to install and configure it using your Testnet credentials. The same guide also explains how to set up your Storj account.
-
-- [Docker](https://www.docker.com/get-started/) – for building solutions.
-
-- [OpenSSL](https://www.openssl.org/) – to generate solution signing key. On Linux, use the `apt install openssl` command; on macOS, use `brew install openssl`.
+You will need the credentials to set up SPCTL, Marketplace GUI and Provider Tools.
 
 ### Set up Provider Tools
 
-_Provider Tools_ is a special application that is necessary to set up providers and create offers.
+To guide you through the process of setting up a provider and offers we made a special SPCTL extension: **Provider Tools**. 
 
-To install Provider Tools, create a separate directory, open Terminal there, and run the following command:
+To install Provider Tools, open Terminal in the directory where you want to place the tool and then run the following command for your OS:
 
 <Tabs>
   <TabItem value="linux" label="Linux" default>
 ```
-curl -L https://github.com/Super-Protocol/provider-tools/releases/download/v0.2.0/provider-tools-linux-x64 -o provider-tools
+curl -L TBD
 chmod +x ./provider-tools
 ```
 
   </TabItem>
-  <TabItem value="macos" label="macOS">
+  <TabItem value="macos" label="MacOS">
 ```
-curl -L https://github.com/Super-Protocol/provider-tools/releases/download/v0.2.0/provider-tools-macos-x64 -o provider-tools
+curl -L TBD
+chmod +x ./provider-tools
+```
+
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+curl -L TBD
 chmod +x ./provider-tools
 ```
 
   </TabItem>
 </Tabs>
 
-:::caution Important!
+<Highlight color="red">указать ссылку для загрузки и выбор для разных OS</Highlight>
 
-Provider Tools downloads its own service copy of SPCTL. To avoid conflict, do not put Provider Tools in the same directory as your SPCTL, and do not use the Provider Tools' copy of SPCTL.
+**Note:** in order to avoid confusion it is best to choose a directory separate from your SPCTL directory, since Provider Tools will also download its own service copy of SPCTL.
 
-:::
+Please keep in mind that Provider Tools is still a work in progress and we will keep on optimizing the provider and offer creation and management processes. In next releases we will adapt it for Marketplace GUI.
 
-Provider Tools is a work in progress. Super Protocol keeps optimizing the provider and offer creation and management.
+### Set up SPCTL
 
-## Main steps
+You probably already have SPCTL set up and configured  by now, but if you don't - please, [do it now](/developers/cli_guides/configuring). You will need SPCTL to prepare and upload your offers and run an Execution Controller script.
 
-To set up a provider and create an active offer, you must complete the following steps:
-
-1. Set up accounts. Besides the Testnet Account, there are three Provider Accounts you will have to create using Provider Tools.
-
-2. Prepare and upload content. Use SPCTL to prepare your Solution or Data, upload it to Storj, and create a resource file.
-
-3. Configure the offer. You need to provide a general description of the offer, its properties, restrictions, and requirements.
-
-4. Create the provider and offer on the blockchain.
-
-5. Place an Offer Provisioner order. Offer Provisioner is an application that regularly checks for new orders that use the provider's active offer and allows such orders to be processed.
-
-6. Pass the Marketplace moderation.
-
-7. Keep your offer alive.
-
-## Step 1. Set up accounts
+## **Step 1 - Setting up accounts**
 
 ### Types of accounts
 
-_User Account_ is the main wallet you will use to create and manage orders. This is your Testnet Account provided by Super Protocol.
+The main wallet that is used to create and manage orders is called **User account**. For testnet purposes, this account is provided to you by the Super Protocol team.
 
-But to become a provider, you also need three other accounts:
+But to become a provider, you need to have three other accounts:
 
-1. _Authority Account_ – to create and manage your provider. This is your main provider account in Super Protocol.
-
-2. _Action Account_ – to create and manage offers. This account executes actions on behalf of the Authority account.
-
-3. _Token Receiver Account_ – to receive rewards in TEE tokens for providing offers on Super Protocol.
+1. **Authority account** your main provider account in Super Protocol, used to create and manage your provider; 
+2. **Action account** executes actions on behalf of an Authority account, used to create and manage offers; 
+3. **Token receiver account** used to receive the TEE rewards for providing offers on Super Protocol.
 
 ---
 
-### Create accounts
+### Creating accounts
 
-Use Provider Tools to generate the three provider accounts. Go to the directory where you downloaded Provider Tools and run the `./provider-tools setup` command.
+We will use the Provider Tools to auto-generate the three accounts.
 
-The tool will request your Testnet Access Token and then ask you questions regarding creation of the provider accounts:
+Go to the directory where you downloaded Provider Tools and run this command: 
+
+```
+./provider-tools setup
+```
+
+The tool will request your Access token and then ask you questions regarding creation of the provider accounts:
 
 `Do you need to generate a new Authority account?`<br/>
 Select `Yes`.
@@ -123,92 +110,91 @@ Select `Yes`.
 `Do you need to generate a new TokenReceiver account?`<br/>
 Select `Yes`.
 
-Alternatively, you can use your own previously created Polygon accounts. You can create them through Metamask and then follow [this guide](https://docs.polygon.technology/tools/wallets/metamask/add-polygon-network/) to add the Polygon Amoy Testnet network. Select `No` in the menu when prompted and enter their private keys.
+**Note:** alternatively, you can use your own previously created Polygon accounts. You can create them through Metamask and then follow [this guide](https://docs.polygon.technology/tools/wallets/metamask/add-polygon-network/) to add the Polygon Amoy Testnet network. Select `No` in the menu when prompted and enter their private keys.
 
 ---
 
 **Expected step result:**
-
 * `config.json` is created in the Provider Tools directory. It contains the SPCTL configuration for the next step as well as the private keys to your provider accounts.
+* Required security deposit of 5 TEE is added to the Action account automatically (for testnet purposes).
+* 5 MATICs are added to the Action account automatically (for testnet purposes).
 
-## Step 2. Prepare content
+<Highlight color="red">токены приходят позже, ТЕЕ будет 200</Highlight>
 
-Solution and Data must be prepared, packed, and uploaded to a storage before they can be used in orders. Go to your SPCTL directory and perform necessary actions using your User Account.
+
+## **Step 2 - Preparing content**
+
+Steps 2 and 5 will require you to prepare and upload your solution or data, and then create an order. This process is also outlined in the [Quick Deployment Guide](/developers/cli_guides/quick_guide#prepare-data).
 
 ### Prepare offer content
 
 **For solution offers**
 
-Solutions have to be packed and signed with [Gramine](https://gramineproject.io/) (aka "graminized") to run correctly inside an Intel SGX confidential enclave (Trusted Execution Environment or TEE). To prepare and pack your solution, execute the [`solutions prepare`](/developers/cli_commands/solutions/prepare) command. It will generate a TAR.GZ archive with your solution and a JSON file with necessary metadata.
+In order to be run correctly inside an Intel SGX confidential enclave (TEE), a solution has to be packed and signed with [Gramine](https://gramineproject.io/) (a.k.a graminized).
 
-You can find a detailed example of how to prepare a Python solution in the [Python deployment guide](/developers/deployment_guides/python/solution_prep).
+Use SPCTL to run the [**solutions prepare**](/developers/cli_commands/solutions/prepare) command.
+
+As a result, a `tar.gz` archive will be generated. 
 
 **For data offers**
 
-To prepare the data, put it into a TAR.GZ archive. Use the following command:
+For data, you can simply place the data into an archive. There is no need to prepare it.
 
-```bash
-tar -czvf ARCHIVE_NAME.tar.gz -C ./ARCHIVE_DATA
-```
-
-Where:
-- `ARCHIVE_NAME.tar.gz` is the desired name of the output archive;
-- `./ARCHIVE_DATA` is the relative path to the directory with your data; you can use the wildcard character `*`, but ensure no hidden or system files end up in the archive.
+As a result, a `tar.gz` archive will be generated.
 
 ---
 
 ### Upload offer content
 
-You need to upload your prepared and packed Solution or Data, so Trusted Execution Environment (TEE) can download it for execution when ordered.
+<Highlight color="red">это делается под юзер аккаунтом</Highlight>
 
-Use SPCTL to run the [`files upload`](/developers/cli_commands/files/upload) command using the TAR.GZ archive with your offer content. It will create a storage order on Super Protocol:
+Before the solution can be executed in TEE, it needs to be uploaded to a storage, from where the TEE will download it for execution when ordered.
 
-```bash
-./spctl files upload OFFER_CONTENT.tar.gz --storage 25,33 --min-rent-minutes 43200
+Use SPCTL to run the [**files upload**](/developers/cli_commands/files/upload) command using the `tar.gz` archive above. Let's call it `offer-content.tar.gz`.
+
+```
+./spctl files upload offer-content.tar.gz --storage 25,33 --min-rent-minutes 43200
 ```
 
 Where:
-- `OFFER_CONTENT.tar.gz` is the name of the archive with your Solution or Data;
-- `--storage 25,33` - slot 33 of storage offer 25. Maximum disk capacity for this slot is 0.977 GB.
-- `--min-rent-minutes 43200` - the lease time is specified as 30 days, because we need the offer content to be available on demand. You can make the lease longer. You can also [replenish the balance](/developers/cli_commands/orders/replenish-deposit) later.
+* `--storage 25,33` - slot 33 of storage offer 25. Maximum disk capacity for this slot is 0.977 GB.
+* `--min-rent-minutes 43200` - the lease time is specified as 30 days, because we need the offer content to be available on demand. You can make the lease longer and you can also [replenish the balance](/developers/cli_commands/orders/replenish-deposit) at a later date.
 
-As a result, SPCTL will generate `resource.json` file that contains the information for TEE on how to access your uploaded Solution or Data. Copy this file to the Provider Tools directory.
+As a result, a resource file will be generated in the `json` format, containing the information for TEE on how to access your uploaded solution. Copy this file to the Provider Tools directory (you will need it in Step 4).
 
 ---
 
 **Expected step result:**
-* Solution or Data has been prepared, archived, and uploaded to long term storage;
-* `resource.json` has been generated and copied to the Provider Tools directory.
+* Solution or data has been prepared, archived and uploaded to long term storage;
+* A `resource.json` has been generated and copied to the Provider Tools directory.
 
-## Step 3. Configure the offer
+## **Step 3 - Configuring offer**
 
-In this step, you will create two JSON files in the Provider Tools directory. The first one will contain a general description and properties of the offer. The second one will specify the required slots and options for your Solution or Data offer.
+Now that we have the accounts, it's time to configure the offers.
+
+You will need to create two .json files in the Provider Tools directory.
 
 ### Offer description
 
-Create the first JSON file in the Provider Tools directory. In this guide, it will be called `offer.json`, but you can choose any name you want.
+**First**, a .json with the general description and properties of the offer.
 
-:::note
+Let's say that in this example our offer is a Solution, a Python script similar to the [Image Classification](/developers/offers/python-image) offer.
 
-It is important that your offer is well-documented, operational, and not containing anything illegal. Refer to the [Moderation Guidelines](/developers/marketplace/moderation/) for more details.
-
-:::
-
-Copy and add the format below into this JSON file:
+Copy and save the format below in a .json file. You can name it anything you want, but for this tutorial let's call it `offer.json`.
 
 ```json title="offer.json"
 {
-  "name": "Name of your offer",
+  "name": "Name of your offer goes here",
   "group": "0",
-  "offerType": "OFFER_TYPE",
+  "offerType": "2",
   "cancelable": false,
-  "description": "Description of your offer; it may include HTML",
+  "description": "Description of your offer goes here, it may include HTML",
   "restrictions": {
     "offers": [
-      "REQUIRED_OFFER_ID"
+      "5"
     ],
     "types": [
-      "REQUIRED_OFFER_TYPE"
+      "2"
     ]
   },
   "metadata": "",
@@ -223,66 +209,28 @@ Copy and add the format below into this JSON file:
 }
 ```
 
-Fill in the following fields:
+Where you need to fill out the following fields:
 
-- `name` – the name of your offer;
-- `group` – leave it as 0;
-- `cancelable` – leave it as False;
-- `offerType` – OFFER_TYPE has to be either 2 for a Solution offer or 3 for Data offer;
-- `description` – the description of your offer, it may contain HTML;
-- `restrictions` – restrictions indicate which other offers must be used together with your offer:
-  + `offers` – REQUIRED_OFFER_ID is the ID of the offer that must be used together with your offer. If you are creating a Solution offer, it has to be either 5 for [Python Base Image](https://marketplace.superprotocol.com/?offer=offerId%3D5) or 6 for [Node.js Base Image](https://marketplace.superprotocol.com/?offer=offerId%3D6);
-  + `types` – REQUIRED_OFFER_TYPE has to be either 2 for Solution offers in the restrictions or 3 for Data offers in the restrictions.
+* `name` - the name of your offer;
+* `group` - leave it as 0, meaning it belongs to input group (Solution or Data offers);
+* `cancelable` - leave it as False;
+* `offerType` - type has to be either 2 for a Solution offer or 3 for Data offer;
+* `description` - the description of your offer. Description may contain HTML;
+* `restrictions` - restrictions indicate which other offers must be used together with your solution:
+  * `offers` - you can restrict here to one of two base images: either 5 (Python) or 6 (Node.js);
+  * `types` - you need to restrict to either offer types 2 (Solutions) or 3 (Data).
 
-**Example 1**: For a Solution offer identical to [Image Classification](/developers/offers/python-image), the part of `offer.json` that you have to fill out should look like this:
+<Highlight color="red">История с рестрикшенами не очень понятна: если солюшен, то можно указать также данные? или данные, то можно указать солюшен? Можно вообще не указывать? людям это будет не понятно, нужно обсудить. И на странице offers update тоже уточнить, там тоже не понятно описано.</Highlight>
 
-```json
-"name": "Image Classification",
-"group": "0",
-"offerType": "2",
-"cancelable": false,
-"description": "Machine-trained Python model that recognizes and classifies objects in an image<br/><br/>This demo solution is compatible with Image Classification Dataset #1 and #2.<br/><br/>It is also possible to use custom datasets. Refer to the documentation for detailed instructions.",
-"restrictions": {
-  "offers": [
-    "5"
-  ],
-  "types": [
-    "2"
-  ]
-}
-```
+You can learn more about the other fields in the [offers update](/developers/cli_commands/offers/offers/update) command.
 
-Where `"offers": ["5"]` is for the Python Base Image which is a Solution offer, hence `"types": ["2"]`.
-
-**Example 2**: For a Data offer identical to [Image Classification Dataset #1](https://marketplace.superprotocol.com/data?offer=offerId%3D18), the part of `offer.json` that you have to fill out should look like this:
-
-```json
-"name": "Image Classification Dataset #1",
-"group": "0",
-"offerType": "3",
-"cancelable": false,
-"description": "Dataset with images of various breeds of dogs<br/><br/>This demo dataset is compatible with the Image Classification solution. Refer to the documentation for detailed instructions.",
-"restrictions": {
-  "offers": [
-    "5",
-    "8"
-  ],
-  "types": [
-    "2",
-    "2"
-  ]
-}
-```
-
-Where `"8"` indicates the ID of the Image Classification Solution offer. Note that you must specify the offer type for every requried offer in the `restrictions`, hence `"types": ["2","2"]`.
-
-To get an example, check existing offers via the Marketplace GUI:
+As an example, this is what these fields look like in the Marketplace:
 
 <img src={require('./../images/cli_guides_providers_offers_1.png').default} width="auto" height="auto"/>
 
 <img src={require('./../images/cli_guides_providers_offers_2.png').default} width="auto" height="auto"/>
 
-Or via CLI using the SPCTL [`offers get`](/developers/cli_commands/offers/offers/get) command:
+And in SPCTL (on blockchain), using the [offers get](/developers/cli_commands/offers/offers/get) command:
 
 ```
 ./spctl offers get value 8
@@ -293,17 +241,23 @@ Or via CLI using the SPCTL [`offers get`](/developers/cli_commands/offers/offers
 <br/>
 <br/>
 
-Refer to the documentation of the [`offers update`](/developers/cli_commands/offers/offers/update) SPCTL command to learn more about the other fields.
+It is important that your offer is well-documented, operational, and not containing anything illegal.
+
+Please refer to the [**Moderation Guidelines**](/developers/marketplace/moderation/) for more details.
 
 ---
 
 ### Offer requirements
 
-You must specify the values of the required slots and options for your Solution or Data offers. Each slot has its price, either Fixed or Per Hour. Depending on the requirements, the customer will select a TEE compute offer configuration, which cannot be lower than your requirements. Read more about the slots and options [here](/developers/fundamentals/slots).
+**Second**, a .json with the values of the required slots and options for your solution or data offer.
 
-Every offer you create may have multiple requirements slots. For each slot you want to add, you must create a separate JSON file. In this guide, it will be called `offer-slot.json`, but you can choose any name you want.
+You can learn more about the slots and options [here](/developers/fundamentals/slots).
 
-Copy and save the following format in your `offer-slot.json` file:
+In a few words: each offer, either solution or data, has system requirements for execution. This is where you specify these requirements. Each requirements slot can have its own price, either Fixed or Per Hour. Depending on these requirements, the customer will select a TEE compute offer configuration, which cannot be lower than your requirements. 
+
+Copy and save this format in a .json file. You can name it anything you want, but for this tutorial let's call it `offer-slot.json`.
+
+Do this for each requirements slot that you want to add to the offer (you can have multiple).
 
 ```json title="offer-slot.json"
 {
@@ -327,13 +281,15 @@ Copy and save the following format in your `offer-slot.json` file:
 }
 ```
 
-You can learn more about these fields in the description of the [`offers add-slot`](/developers/cli_commands/offers/slots/add-slot) command. Modify these fields as necessary. Since this is your offer, only you know the [pricing terms](/developers/fundamentals/orders#cost-and-pricing) and compute configuration your solution or data needs to run.
+You can learn more about these fields in the [offers add-slot](/developers/cli_commands/offers/slots/add-slot) command. Note that this command may be used to create additional slots, but the initial slot must be created using Provider Tools as per this guide.
 
-To get an example, check existing offers via the Marketplace GUI:
+Modify these fields as necessary. This is your offer, and only you know what compute configuration your solution or data will need to run, as well as the [pricing terms](/developers/fundamentals/orders#cost-and-pricing).
+
+As an example, this is what they look like in the Marketplace: 
 
 <img src={require('./../images/cli_guides_providers_offers_4.png').default} width="auto" height="auto"/>
 
-Or via CLI using the SPCTL [offers get-slot](/developers/cli_commands/offers/slots/get-slot) command:
+And in SPCTL (on blockchain), using the [offers get-slot](/developers/cli_commands/offers/slots/get-slot) command:
 
 ```
 ./spctl offers get-slot value --offer 8 --slot 4
@@ -344,10 +300,10 @@ Or via CLI using the SPCTL [offers get-slot](/developers/cli_commands/offers/slo
 ---
 
 **Expected step result:**
-* `offer.json` with offer description;
-* `offer-slot.json` with offer requirements (slots and options). There may be more than one such file.
+* `offer.json` with offer description is prepared;
+* `offer-slot.json` with offer requirements (slots and options) is prepared. There may be more than one.
 
-## **Step 4. Create the provider and offer**
+## **Step 4 - Creating provider and offer**
 
 Let's recap. At this point you need to have the following in the Provider Tools directory:
 * `config.json` with the credentials for authority, action and tokenReceiver accounts;
