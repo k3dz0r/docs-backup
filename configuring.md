@@ -45,22 +45,21 @@ You can also download and install SPCTL manually from the Super Protocol [GitHub
 
 ## For users
 
-Execute the `./spctl setup` command to initiate the setup dialog. First, provide your Testnet Access Token and then your Testnet Private Key.
+Execute the `./spctl setup` command to initiate the setup dialog. First, provide your Testnet Access Token and then your Testnet Private Key. You can find them in your Testnet invitation email.
 
-After that, SPCTL asks if you have a Storj bucket with its access tokens. This step is optional. Select `No` if you do not have a configured Storj account yet. You can provide this information later or skip this step completely.
+Further, SPCTL asks if you have a Storj bucket with configured access grants. This step is optional. Select `No` if you do not have them yet. You can configure Storj and provide this information [later](/developers/cli_guides/configuring#set-up-storj) or skip this step entirely.
 
 After that, SPCTL creates `config.json` in the SPCTL root directory. If you need to update your account information, execute `./spctl setup` again or modify `config.json` manually in any text editor.
 
-You will set up Storj [later in this guide](/developers/cli_guides/configuring#set-up-storj).
-
 :::note
+
 For SPCTL to work correctly, `config.json` must be in the same directory as the SPCTL executable. Do not move or rename this file unless you want to create a separate SPCTL configuration for another Testnet account.
 
 :::
 
-### Manual configuration 
+### Manual configuration
 
-You can also skip the `./spctl setup` command completely and set up SPCTL manually. [Download the template](/assets/files/config-5ddefb773267b768e998e4cd9fd366fe.json) and rename it to `config.json`. Alternatively, create an empty `config.json` file in the SPCTL directory and then copy and paste the following template:
+You can also skip the `./spctl setup` command completely and set up SPCTL manually. [Download the template](./assets/config.json) and rename it to `config.json`. Alternatively, create an empty `config.json` file in the SPCTL directory and then copy and paste the following template:
 
 ```json title="config.json"
 {
@@ -95,7 +94,7 @@ Do not change the preconfigured parameters and fill in the following ones:
 |:-|:-|
 |accessToken| Your Testnet Access Token from the Testnet invitation email||
 |accountPrivateKey| Your Testnet Private Key from the Testnet invitation email|
-|key| Private key for order results encryption. Use the [workflows generate-key](/developers/cli_commands/workflows/generate-key) command to create this key|
+|key| Private key for order result encryption. Use the [workflows generate-key](/developers/cli_commands/workflows/generate-key) command to create this key|
 |bucket| (optional) The name of your Storj bucket|
 |writeAccessToken| (optional) Storj access grant with **write** and **delete** permissions for this bucket|
 |readAccessToken| (optional) Storj access grant with **read** permission for this bucket|
@@ -112,7 +111,7 @@ Where `0xB9f0b77BDbAe9fBe3E60BdC567E453f503605BAa` is your Action Account wallet
 
 ### Manual configuration
 
-As with your User Account's configuration file, you can manually create the configuration file for the Action Account. Back up the current `config.json` or create a separate directory with a copy of the SPCTL executable specifically for your Action Account.
+As with your User Account's configuration file, you can manually create the configuration file for the Action Account. Back up the current `config.json` or create a separate directory for your Action Account with a copy of the SPCTL executable.
 
 Use the template from the previous section. Do not change the preconfigured parameters and fill in the following ones:
 
@@ -121,7 +120,7 @@ Use the template from the previous section. Do not change the preconfigured para
 |accessToken| Your regular Testnet Access Token from the Testnet invitation email|
 |accountPrivateKey| Private Key of your provider's Action Account|
 |authorityAccountPrivateKey| Private Key of your provider's Authority Account|
-|key| Private key for order results encryption. You can use the key from your User Account or generate a new one with the [workflows generate-key](/developers/cli_commands/workflows/generate-key) command|
+|key| Private key for order result encryption. Use the key from your User Account or generate a new one with the [workflows generate-key](/developers/cli_commands/workflows/generate-key) command|
 |bucket| (optional) Name of your Storj bucket|
 |writeAccessToken| (optional) Storj access grant with **write** and **delete** permissions for this bucket|
 |readAccessToken| (optional) Storj access grant with **read** permission for this bucket|
@@ -157,31 +156,35 @@ Use the [`tokens request`](https://docs.dev.superprotocol.com/developers/cli_com
 ./spctl tokens request --matic
 ```
 
-Execute the [`workflows create`](/developers/cli_commands/workflows/create) command to create a [Super Chat](/developers/offers/superchat) order:
+It may take a couple of minutes for the tokens to appear on your account. When you have them, execute the [`workflows create`](/developers/cli_commands/workflows/create) command to create a [Super Chat](/developers/offers/superchat) order:
 
 ```
 ./spctl workflows create --solution 12,12 --solution 6,2 --data 17,22 --storage 25,30
 ```
 
-If you order was created successfully, you will see the following in the last line of the output:
+When your order is created, you will see the following in the last line of CLI output:
 
 ```
-Workflow was created, TEE order id: ["ORDER_ID"]
+Workflow was created, TEE order id: ["XXXX"]
 ```
 
-Where `ORDER_ID` is your the ID of your order.
+Where `XXXX` is the ID of your order.
 
-You can then check the order status using the [`orders`](/developers/cli_commands/orders) command or in [Marketplace GUI](/developers/marketplace).
+It usually takes 20-25 minutes for this order to be done. You can then check the order status using the [`orders`](/developers/cli_commands/orders) command or in [Marketplace GUI](/developers/marketplace).
 
 ## Set up Storj
 
-This step is optional. For quick deployment, you can use an existing storage offer from the Marketplace when using the [files upload](/developers/cli_commands/files/upload) command.
+This step is optional. For quick deployment, you can use an existing storage offer on the Marketplace in the [files upload](/developers/cli_commands/files/upload) command. For additional control, you can configure your storage manually. Register a [Storj](https://www.storj.io/) account if you do not have one yet.
 
-For additional control, you can configure your storage manually. Register a [Storj](https://www.storj.io/) account if you do not have one yet. If you are using a free Storj account, keep in mind that your files will become unavailable when the trial period is over.
+:::note
+
+If you have a free Storj account, your files will become unavailable after the end of the trial period.
+
+:::
 
 Create a bucket for your encrypted solutions and data. Refer to [this guide](https://docs.storj.io/dcs/getting-started/quickstart-objectbrowser/).
 
-Create two access grants for this bucket. One should provide **write** and **delete** permissions, and the other one – **read** permission. Alternatively, you can create a single access grant with full access. Refer to [this guide](https://docs.storj.io/dcs/getting-started/quickstart-uplink-cli/uploading-your-first-object/create-first-access-grant/) to generate them.
+Create two access grants for this bucket. One should provide **write** and **delete** permissions, and the other one – **read** permission. Alternatively, you can create a single access grant with **all** permission. Refer to [this guide](https://docs.storj.io/dcs/getting-started/quickstart-uplink-cli/uploading-your-first-object/create-first-access-grant/) to generate access grants.
 
 Open SPCTL's `config.json` in a text editor and fill in the following parameters:
 
