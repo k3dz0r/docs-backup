@@ -47,7 +47,7 @@ You can also download and install SPCTL manually from the Super Protocol [GitHub
 
 Execute the `./spctl setup` command to initiate the setup dialog. First, provide your Testnet Access Token and then your Testnet Private Key. You can find them in your Testnet invitation email.
 
-Further, SPCTL asks if you have a Storj bucket with configured access grants. This step is optional. Select `No` if you do not have them yet. You can configure Storj and provide this information [later](/developers/cli_guides/configuring#set-up-storj) or skip this step entirely.
+Further, SPCTL asks if you have a Storj bucket with configured access grants. This step is optional. Select `No` if you do not have them yet. You can configure Storj and provide this information [later in this guide](/developers/cli_guides/configuring#set-up-storj) or skip this step entirely.
 
 After that, SPCTL creates `config.json` in the SPCTL root directory. If you need to update your account information, execute `./spctl setup` again or modify `config.json` manually in any text editor.
 
@@ -101,7 +101,7 @@ Do not change the preconfigured parameters and fill in the following ones:
 
 ## For offer providers
 
-This section is for offer providers only. If you are a regular user, skip it and go to the next section [Create a test order](/developers/cli_guides/configuring#create-a-test-order).
+This section is for offer providers only. If you are a regular user, skip it, and go to the next section to [create a test order](/developers/cli_guides/configuring#create-a-test-order).
 
 Offer providers need another copy of SPCTL configured for their Action Account. If you completed all the necessary steps in the [Providers and Offers](/developers/cli_guides/providers_offers) guide, you should have a configuration file created automatically in your Provider Tools directory. Its name looks like this:
 
@@ -113,7 +113,37 @@ Where `0xB9f0b77BDbAe9fBe3E60BdC567E453f503605BAa` is your Action Account wallet
 
 As with your User Account's configuration file, you can manually create the configuration file for the Action Account. Back up the current `config.json` or create a separate directory for your Action Account with a copy of the SPCTL executable.
 
-Use the template from the previous section. Do not change the preconfigured parameters and fill in the following ones:
+Use the following `config.json` template:
+
+```json title="config.json"
+{
+    "backend": {
+        "url": "https://bff.testnet.superprotocol.com/graphql",
+        "accessToken": ""
+    },
+    "blockchain": {
+        "rpcUrl": "https://amoy.polygon.superprotocol.com/hesoyam",
+        "smartContractAddress": "0x589c5F093524e9a6cD4bAEe786859bC6C3e38bec",
+        "accountPrivateKey": "",
+        "authorityAccountPrivateKey": ""
+    },
+    "storage": {
+        "type": "STORJ",
+        "bucket": "",
+        "writeAccessToken": "",
+        "readAccessToken": ""
+    },
+    "workflow": {
+        "resultEncryption": {
+            "algo": "ECIES",
+            "key": "",
+            "encoding": "base64"
+        }
+    }
+}
+```
+
+Do not change the preconfigured parameters and fill in the following ones:
 
 |**Parameter**|**Description**|
 |:-|:-|
@@ -125,15 +155,13 @@ Use the template from the previous section. Do not change the preconfigured para
 |writeAccessToken| (optional) Storj access grant with **write** and **delete** permissions for this bucket|
 |readAccessToken| (optional) Storj access grant with **read** permission for this bucket|
 
-You can find your Authority and Action Accounts Private Keys in `provider-tools-config.json` in the Provider Tools directory.
-
-It looks like this:
+You can find the section with your Authority and Action Accounts Private Keys in `provider-tools-config.json` in the Provider Tools directory:
 
 ```json title="provider-tools-config.json"
     "account": {
-        "authority": "0x50612a8bf52cb263825e58c72361ea48904efn7af7e2b549ea9c2ed02059c668d",
-        "action": "0x0512ad96f1900d3ecf0987m81c74df455ebb49kjce5bc1fd35c0b410c7dc6f05",
-        "tokenReceiver": "0x167d93786ghbf058965a5a582a1d52ca1e620d19b7f1e47330f2b64d9fcb6a38"
+        "authority": "0x50612a8bf52cb263825e58c72361ea58c04efn7af7e5b549ea9c2ed02059c668d",
+        "action": "0x0512ad96f1900d3ecf0987m81c74af455ebb49kjce5bc1fd3zc0b410c7dc6f05",
+        "tokenReceiver": "0x167d93786ghbf058065a5a592a1d55ca1e620d19b7d1e47330f2b64d9fcb6a38"
     },
 ```
 
@@ -145,7 +173,7 @@ Before you create an order, ensure you have the latest version of SPCTL. Execute
 ./spctl --version
 ```
 
-Go to the SPCTL's [GitHub page](link](https://github.com/Super-Protocol/ctl/releases)) to see the latest version.
+Go to the SPCTL's [GitHub page](https://github.com/Super-Protocol/ctl/releases) to see the latest version.
 
 Use the [`tokens request`](https://docs.dev.superprotocol.com/developers/cli_commands/tokens/request) command to get free test TEE and MATIC tokens:
 
@@ -174,11 +202,13 @@ It usually takes 20-25 minutes for this order to be done. You can then check the
 
 ## Set up Storj
 
-This step is optional. For quick deployment, you can use an existing storage offer on the Marketplace in the [files upload](/developers/cli_commands/files/upload) command. For additional control, you can configure your storage manually. Register a [Storj](https://www.storj.io/) account if you do not have one yet.
+This step is optional. You can add a Marketplace storage offer to the [`files upload`](/developers/cli_commands/files/upload) command instead of configuring Storj. However, for additional control, you can set up and use your storage.
+
+Register a [Storj](https://www.storj.io/) account if you do not have one yet.
 
 :::note
 
-If you have a free Storj account, your files will become unavailable after the end of the trial period.
+If you use a free Storj account, your files will become unavailable after the end of the trial period.
 
 :::
 
@@ -193,3 +223,7 @@ Open SPCTL's `config.json` in a text editor and fill in the following parameters
 |bucket| Name of a Storj bucket|
 |writeAccessToken| Storj access grant with **write** and **delete** permissions for this bucket|
 |readAccessToken| Storj access grant with **read** permission for this bucket|
+
+## Support
+
+If you have any issues or questions, contact Super Protocol on [Discord](https://discord.gg/superprotocol). The Community Managers will be happy to help you.

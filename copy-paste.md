@@ -8,3 +8,5 @@ To complete this guide, you need Super Protocol Testnet access. If you do not ha
 ## Support
 
 If you have any issues or questions, contact Super Protocol on [Discord](https://discord.gg/superprotocol). The Community Managers will be happy to help you.
+
+## Test
