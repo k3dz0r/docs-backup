@@ -13,7 +13,7 @@ The guide is intended for advanced Web3 users; feel free to skip it and continue
 <br/>
 <br/>
 
-Web2 users must first [log in as a Web3 user](/guides/log-in) to be able to upload to a personal Storj account instead of the Super Protocol cloud.
+Web2 users must first [log in as a Web3 user](/marketplace/guides/log-in) to be able to upload to a personal Storj account instead of the Super Protocol cloud.
 
 ## Step 1. Register a Storj account
 
