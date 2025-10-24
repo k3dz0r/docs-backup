@@ -10,7 +10,7 @@ This group contains commands to prepare a <a id="solution"><span className="dash
 
 ## Commands
 
-| **Command** | **Description** |
-| :- | :- |
-| [solutions generate-key](/cli/commands/solutions/generate-key) | Generates a solution signing key. |
-| [solutions prepare](/cli/commands/solutions/prepare) | Prepares a solution for deployment. |
+| **Command**                                                       | **Description** |
+| :-                                                                | :- |
+| [solutions generate-key](/cli/commands/solutions/generate-key)    | Generates a solution signing key. |
+| [solutions prepare](/cli/commands/solutions/prepare)              | Prepares a solution for deployment. |
