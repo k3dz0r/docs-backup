@@ -25,11 +25,9 @@ When preparing your training scripts, keep in mind the special file structure wi
 
 Your scripts must find the data in `/sp/inputs` and write the results to `/sp/output`.
 
-:::important
+**Important!**
 
-Always use absolute paths, such as `/sp/...`.
-
-:::
+    Always use absolute paths, such as `/sp/...`.
 
 ## run-unsloth.sh
 
@@ -70,7 +68,7 @@ Unsloth order id: 259126
 Done.
 ```
 
-## Check the order result
+### Check the order result
 
 1. The order will take some time to complete. Check the order status:
 
@@ -94,11 +92,30 @@ If you lost the order ID, check all your orders to find it:
 
 The downloaded TAR.GZ archive contains the results in the `output` directory and execution logs.
 
-## Additional options
+## Dry run
 
-The `run-unsloth.sh` script offers several additional run options.
+```shell
+./run-unsloth.sh --suggest-only
+```
 
-### Jupyter Notebook
+The option `--suggest-only` allows you to perform a dry run without actually uploading files and creating orders.
+
+Complete the dialog, as usual, but only use absolute paths.
+
+In the output, you will see a prepared command for running the script non-interactively, allowing you to easily modify the variables and avoid re-entering the dialog. For example:
+
+```shell
+RUN_MODE=file \
+RUN_DIR=/home/user/Downloads/yma-run \
+RUN_FILE=sft_example.py \
+DATA_RESOURCE=/home/user/unsloth/scripts/yma_data_example-data.json \
+MODEL_RESOURCE=/home/user/unsloth/scripts/medgemma-27b-ft-merged.resource.json \
+/home/user/unsloth/scripts/run-unsloth.sh \
+--tee 8 \
+--config ./config.json
+```
+
+## run-unsloth.sh with Jupyter Notebook
 
 You can launch and use Jupyter Notebook instead of uploading training scripts directly.
 
@@ -149,34 +166,9 @@ Jupyter instance is available at: https://beja-bine-envy.superprotocol.io
 
 8. Open the link in your browser to access Jupyter’s UI.
 
-:::note
+**Note**
 
-The data in `/sp/output` will not be published as the order result when running the Jupyter server. To save your fine-tuning results, upload them either:
-- via Python code
-- using the integrated terminal in the Jupyter server
-- using SPCTL with the config uploaded at Step 7.
-
-:::
-
-### Dry run
-
-```shell
-./run-unsloth.sh --suggest-only
-```
-
-The option `--suggest-only` allows you to perform a dry run without actually uploading files and creating orders.
-
-Complete the dialog, as usual, but only use absolute paths.
-
-In the output, you will see a prepared command for running the script non-interactively, allowing you to easily modify the variables and avoid re-entering the dialog. For example:
-
-```shell
-RUN_MODE=file \
-RUN_DIR=/home/user/Downloads/yma-run \
-RUN_FILE=sft_example.py \
-DATA_RESOURCE=/home/user/unsloth/scripts/yma_data_example-data.json \
-MODEL_RESOURCE=/home/user/unsloth/scripts/medgemma-27b-ft-merged.resource.json \
-/home/user/unsloth/scripts/run-unsloth.sh \
---tee 8 \
---config ./config.json
-```
+    The data in `/sp/output` will not be published as the order result when running the Jupyter server. To save your fine-tuning results, upload them either:
+    - via Python code
+    - using the integrated terminal in the Jupyter server
+    - using SPCTL with the config uploaded at Step 7.
