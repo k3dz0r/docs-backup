@@ -1,24 +1,35 @@
 ![Super Protocol](./readme-splash.png)
 
-Super Protocol is a **confidential computing platform and AI cloud** that lets organizations run sensitive AI workloads securely on any infrastructure while keeping data, models, and code protected during execution. It provides hardware-enforced isolation, cryptographic verification of all operations, and a neutral, cloud-agnostic architecture to enable verifiable, compliant, and collaborative AI workflows without exposing raw assets. :contentReference[oaicite:0]{index=0}
+Super Protocol is a **confidential computing platform and AI cloud** that lets organizations run sensitive AI workloads securely on any infrastructure while keeping data, models, and code protected during execution. It provides hardware-enforced isolation, cryptographic verification of all operations, and a neutral, cloud-agnostic architecture to enable verifiable, compliant, and collaborative AI workflows without exposing raw assets.
 
-## What We Do
+## Core Concepts
 
-- **Confidential AI & Data Protection**  
-  Protect workloads in Trusted Execution Environments (TEEs) so data stays private even while it’s being processed. :contentReference[oaicite:1]{index=1}
+**Confidentiality**
 
-- **Verifiable Execution**  
-  Generate cryptographic proof of how AI tasks ran, helping meet audit, compliance, and governance requirements. :contentReference[oaicite:2]{index=2}
+Super isolates data within hardware-secure enclaves that no administrator, operator, or cloud provider can access, encrypts every user interaction with keys visible only to the user, and enables multi-party computation where each participant's raw information remains hidden from everyone else.
 
-- **Neutral, Decentralized Architecture**  
-  Run AI across clouds, partners, and teams without vendor lock-in or shared infrastructure trust. :contentReference[oaicite:3]{index=3}
+**Verifiability**
 
-## 🐝 Super Swarm
+Super provides cryptographic proof of each workload's execution, enables parties to confirm results independently of the cloud provider, and generates immutable execution records that meet audit and compliance requirements
 
-**Super Swarm** is the decentralized computing protocol that powers the Super Protocol network. It enables independent Confidential Virtual Machines (CVMs) to *self-organize into a distributed, fault-tolerant cloud*. Swarm nodes automatically discover and verify each other, elect leaders, and form task groups. :contentReference[oaicite:4]{index=4}
+**Neutrality**
 
-This approach brings *confidential, verifiable, and unstoppable* cloud computing to a global, peer-to-peer network of participants. :contentReference[oaicite:5]{index=5}
+Super runs on any cloud without vendor lock-in, is built on an open and transparent foundation, and keeps organizations in full control of their infrastructure, data, and keys.
 
+**Integrity**
 
+Super applies the same security and execution standards across all environments, enforces consistent governance and deployment policies, and supports a scalable ecosystem where workloads run reliably from a single node to global multi-cloud networks. Together, these capabilities allow organizations to run sensitive AI, protect proprietary models and data, and collaborate across departments or companies without exposing underlying assets.
 
-Visit [superprotocol.com](https://superprotocol.com/) to learn more.
+## Super Swarm
+
+**Super Swarm** is the decentralized computing protocol that powers the Super Protocol network. It enables independent Confidential Virtual Machines to self-organize into a distributed, fault-tolerant cloud.
+
+- Nodes automatically find, verify, and attest to each other to form clusters.
+- Leader election and dynamic grouping allow tasks to scale beyond single machines.
+- Entire operations are governed algorithmically, removing central control and enabling trustless coordination.
+
+Super Swarm extends traditional cloud scaling with fault tolerance, trust minimization, and verifiable execution even across untrusted providers.
+
+-----
+
+Learn more at [superprotocol.com](https://superprotocol.com/) and in the [Super Protocol docs](https://docs.superprotocol.com/).
