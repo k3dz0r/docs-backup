@@ -1,7 +1,5 @@
 ![Super Protocol](./readme-splash.png)
 
-## Super Protocol
-
 Super Protocol is a **confidential computing platform and AI cloud** that lets organizations run sensitive AI workloads securely on any infrastructure while keeping data, models, and code protected during execution. It provides hardware-enforced isolation, cryptographic verification of all operations, and a neutral, cloud-agnostic architecture to enable verifiable, compliant, and collaborative AI workflows without exposing raw assets.
 
 [Learn more about Super Protocol](https://superprotocol.com/about/intro)
